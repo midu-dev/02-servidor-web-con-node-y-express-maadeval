@@ -73,7 +73,7 @@ function handlePostContact (req, res) {
 
   req.on('end', () => {
     const data = JSON.parse(body)
-    req.writeHead(201, {
+    res.writeHead(201, {
       'Content-Type': 'application/json; charset=utf-8'
     })
     return res.end(JSON.stringify(data))
