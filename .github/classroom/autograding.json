@@ -3,7 +3,7 @@
     {
       "name": "Test HTTP Node",
       "setup": "npm install",
-      "run": "npm test:node",
+      "run": "npm run test:node",
       "input": "",
       "output": "",
       "comparison": "included",
@@ -13,7 +13,7 @@
     {
       "name": "Test Express",
       "setup": "npm install",
-      "run": "npm test:express",
+      "run": "npm run test:express",
       "input": "",
       "output": "",
       "comparison": "included",
