@@ -1,16 +1,40 @@
-name: GitHub Classroom Workflow
-
-on: [push]
-
+name: Autograding Tests
+'on':
+- workflow_dispatch
+- repository_dispatch
 permissions:
   checks: write
   actions: read
   contents: read
-
 jobs:
-  build:
-    name: Autograding
+  run-autograding-tests:
     runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
     steps:
-      - uses: actions/checkout@v2
-      - uses: education/autograding@v1
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Test HTTP Node
+      id: test-http-node
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test HTTP Node
+        setup-command: npm install
+        command: npm run test:node
+        timeout: 10
+        max-score: 5
+    - name: Test Express
+      id: test-express
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Test Express
+        setup-command: npm install
+        command: npm run test:express
+        timeout: 10
+        max-score: 5
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TEST-HTTP-NODE_RESULTS: "${{steps.test-http-node.outputs.result}}"
+        TEST-EXPRESS_RESULTS: "${{steps.test-express.outputs.result}}"
+      with:
+        runners: test-http-node,test-express
